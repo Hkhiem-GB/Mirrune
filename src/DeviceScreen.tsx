@@ -28,6 +28,7 @@ import {
     useRef,
     useState,
 } from "react";
+import { useTranslation } from "react-i18next";
 
 interface ScrcpyStreamMetadata {
     deviceName: string;
@@ -87,6 +88,8 @@ const INITIAL_STATS: MediaStats = {
 };
 
 const RECONNECT_DELAY = 1500;
+const MAX_RECONNECT_DELAY = 30_000;
+const MAX_RECONNECT_ATTEMPTS = 10;
 const STATS_INTERVAL = 500;
 const VIDEO_STARTUP_TIMEOUT = 15_000;
 
@@ -375,6 +378,7 @@ function convertAnnexBToAvcc(
 // ==================================================
 
 function DeviceScreen() {
+    const { t } = useTranslation();
     const screenWindow = getCurrentWindow();
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -413,6 +417,8 @@ function DeviceScreen() {
     const [audioOutputError, setAudioOutputError] = useState("");
     const [hasShownWindow, setHasShownWindow] = useState(false);
     const activateAudioRef = useRef<(() => Promise<void>) | null>(null);
+    const reconnectAttemptsRef = useRef(0);
+    const reconnectDelayRef = useRef(RECONNECT_DELAY);
 
     const isMediaReady =
         mediaStatus === "ready" ||
@@ -1868,13 +1874,29 @@ function DeviceScreen() {
                 return;
             }
 
+            if (reconnectAttemptsRef.current >= MAX_RECONNECT_ATTEMPTS) {
+                console.warn(
+                    "[Mirrune] Reconnect attempts exceeded max limit."
+                );
+                setMediaStatus("error");
+                setMediaError(t("screen.reconnect_limit"));
+                return;
+            }
+
+            const backoffDelay = Math.min(
+                delay * 2 ** reconnectAttemptsRef.current,
+                MAX_RECONNECT_DELAY
+            );
+            reconnectDelayRef.current = backoffDelay;
+            reconnectAttemptsRef.current += 1;
+
             retryTimer = window.setTimeout(() => {
                 retryTimer = undefined;
 
                 if (!disposed) {
                     void connect();
                 }
-            }, delay);
+            }, backoffDelay);
         };
 
         // --------------------------------------------------
@@ -1983,6 +2005,9 @@ function DeviceScreen() {
                         message: "WebSocket media đã kết nối; đang xác thực.",
                     });
                     setMediaStatus("authenticating");
+
+                    reconnectAttemptsRef.current = 0;
+                    reconnectDelayRef.current = RECONNECT_DELAY;
 
                     ws.send(info.token);
                 };
@@ -2264,6 +2289,9 @@ function DeviceScreen() {
     // ==================================================
 
     const retryConnection = useCallback(() => {
+        reconnectAttemptsRef.current = 0;
+        reconnectDelayRef.current = RECONNECT_DELAY;
+
         setMediaStatus("initializing");
 
         setMediaError("");
@@ -2668,16 +2696,16 @@ function DeviceScreen() {
 
                             <h2>
                                 {mediaStatus === "error"
-                                    ? "Không thể giải mã video"
+                                    ? t("screen.error")
                                     : mediaStatus === "disconnected"
-                                        ? "Mất kết nối media server"
+                                        ? t("screen.disconnected")
                                         : mediaStatus === "receiving"
-                                            ? "Đang chờ khung hình"
+                                            ? t("screen.streaming")
                                             : mediaStatus === "ready"
-                                                ? "Kênh media đã sẵn sàng"
+                                                ? t("screen.ready")
                                                 : mediaStatus === "authenticating"
-                                                    ? "Đang xác thực media server"
-                                                    : "Đang khởi tạo luồng hình ảnh"}
+                                                    ? t("screen.authenticating")
+                                                    : t("screen.initializing")}
                             </h2>
 
                             <p>
@@ -2725,7 +2753,7 @@ function DeviceScreen() {
                                     onClick={retryConnection}
                                 >
                                     <RefreshCw size={14} />
-                                    Thử kết nối lại
+                                    {t("screen.retry")}
                                 </button>
                             )}
 

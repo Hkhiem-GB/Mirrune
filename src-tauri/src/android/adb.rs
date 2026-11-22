@@ -1,5 +1,7 @@
 use super::AndroidDevice;
 use std::collections::HashMap;
+#[cfg(windows)]
+use std::os::windows::process::CommandExt;
 use std::{
     io::{self, Read},
     path::Path,
@@ -12,8 +14,15 @@ const VERIFY_DEVICE_TIMEOUT: Duration = Duration::from_secs(15);
 
 /// Thực thi một lệnh ADB và trả về stdout.
 fn run_adb(adb: &Path, args: &[&str]) -> Result<String, String> {
-    let output = Command::new(adb)
-        .args(args)
+    let mut command = Command::new(adb);
+    command.args(args);
+
+    #[cfg(windows)]
+    {
+        command.creation_flags(0x08000000); // CREATE_NO_WINDOW
+    }
+
+    let output = command
         .output()
         .map_err(|error| format!("Không thể khởi chạy ADB ({}): {error}", adb.display()))?;
 
@@ -35,10 +44,18 @@ pub(crate) fn run_command_with_timeout(
     args: &[&str],
     timeout: Duration,
 ) -> Result<Output, String> {
-    let mut child = Command::new(program)
+    let mut command = Command::new(program);
+    command
         .args(args)
         .stdout(Stdio::piped())
-        .stderr(Stdio::piped())
+        .stderr(Stdio::piped());
+
+    #[cfg(windows)]
+    {
+        command.creation_flags(0x08000000); // CREATE_NO_WINDOW
+    }
+
+    let mut child = command
         .spawn()
         .map_err(|error| format!("Không thể chạy {}: {error}", program.display()))?;
 

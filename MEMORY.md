@@ -1,0 +1,1 @@
+- [Terminal spawn root cause](memory/terminal-spawn-root-cause.md) — Windows `Stdio::inherit()` creates console windows per child; fixed with `Stdio::null()` + `CREATE_NO_WINDOW`, plus frontend reconnect backoff/cap in DeviceScreen.tsx

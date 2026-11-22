@@ -505,6 +505,7 @@ impl MediaReceiver {
         queues.prepare_for_client();
     }
 
+    #[allow(dead_code)]
     pub(crate) fn try_recv(&mut self) -> Result<MediaEvent, std::sync::mpsc::TryRecvError> {
         let mut queues = self
             .shared

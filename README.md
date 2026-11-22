@@ -22,7 +22,7 @@ Mirrune giúp kết nối thiết bị Android, xem màn hình trực tiếp tr�
 - Đối với **iOS** và **macOS** thì sẽ cập nhật sau.
 ## Phiên bản
 
-**0.1.0**
+**0.1.1**
 
 ## Hướng dẫn sử dụng
 

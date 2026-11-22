@@ -24,6 +24,7 @@ const AUTH_READ_TIMEOUT: Duration = Duration::from_millis(100);
 const WRITE_TIMEOUT: Duration = Duration::from_secs(2);
 
 const READY_MESSAGE: &str = "MIRRUNE_READY";
+#[allow(dead_code)]
 const BUSY_MESSAGE: &str = "MIRRUNE_BUSY";
 
 // Generation counter incremented on every accepted client connection.

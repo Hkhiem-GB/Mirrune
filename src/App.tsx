@@ -1,8 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
+import { getVersion } from "@tauri-apps/api/app";
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
+import { useTranslation } from "react-i18next";
 import DeviceScreen from "./DeviceScreen";
+import { SettingsModal } from "./components/SettingsModal";
+import { AboutModal } from "./components/AboutModal";
+import { UpdateModal } from "./components/UpdateModal";
 import {
     MEDIA_PIPELINE_LOG_EVENT,
     type MediaPipelineLogPayload,
@@ -21,6 +26,7 @@ import {
     Radio,
     RefreshCw,
     ScanLine,
+    Settings,
     Smartphone,
     Unplug,
     Video,
@@ -109,6 +115,16 @@ async function openDeviceScreen() {
 }
 
 function MainApp() {
+    const { t } = useTranslation();
+    const [appVersion, setAppVersion] = useState("0.1.1");
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const [isAboutOpen, setIsAboutOpen] = useState(false);
+    const [isUpdateOpen, setIsUpdateOpen] = useState(false);
+
+    useEffect(() => {
+        void getVersion().then((v) => { if (v) setAppVersion(v); }).catch(() => {});
+    }, []);
+
     const [devices, setDevices] = useState<AndroidDevice[]>([]);
     const [activeSerial, setActiveSerial] = useState<string | null>(null);
     const [sessionStatus, setSessionStatus] =
@@ -396,19 +412,19 @@ function MainApp() {
         (device) => device.serial === activeSerial
     );
     const connectionLabel = connecting
-        ? "PROCESSING"
+        ? t("header.processing")
         : sessionStatus === "streaming"
-            ? "ONLINE"
+            ? t("header.online")
             : sessionStatus === "error"
                 ? "ERROR"
                 : activeDevice
-                    ? "MEDIA SETUP"
-                    : "IDLE";
+                    ? t("header.media_setup")
+                    : t("header.idle");
 
     const getStatus = (state: string) => {
-        if (state === "device") return "Sẵn sàng";
-        if (state === "unauthorized") return "Chưa cấp quyền";
-        if (state === "offline") return "Ngoại tuyến";
+        if (state === "device") return t("devices.ready");
+        if (state === "unauthorized") return t("devices.unauthorized");
+        if (state === "offline") return t("devices.offline");
         return state;
     };
 
@@ -423,20 +439,27 @@ function MainApp() {
                     <img
                         className="brand-logo"
                         src="/logo/svg/primary-logo-transparent.svg"
-                        alt="MIRRUNE — Screen Audio Bridge"
+                        alt={t("header.brand_alt")}
                     />
                 </div>
 
                 <div className="header-center">
-                    <span className="header-path">WORKSPACE</span>
+                    <span className="header-path">{t("header.workspace")}</span>
                     <ChevronRight size={13} />
-                    <span className="header-current">ANDROID LINK</span>
+                    <span className="header-current">{t("header.android_link")}</span>
                 </div>
 
                 <div className="header-status">
                     <span className="system-pulse" />
-                    <span>{activeDevice ? "DEVICE LINKED" : "SYSTEM READY"}</span>
-                    <span className="header-version">V0.1.0</span>
+                    <span>{activeDevice ? t("header.device_linked") : t("header.system_ready")}</span>
+                    <button
+                        className="header-settings-btn"
+                        onClick={() => setIsSettingsOpen(true)}
+                        aria-label={t("header.settings_btn")}
+                        title={t("header.settings_btn")}
+                    >
+                        <Settings size={14} />
+                    </button>
                 </div>
 
                 {(error || message) && (
@@ -488,8 +511,7 @@ function MainApp() {
                         </h1>
 
                         <p>
-                            Quản lý kết nối USB và thiết lập cầu nối giữa
-                            thiết bị Android với máy tính.
+                            {t("intro.subtitle")}
                         </p>
                     </div>
 
@@ -502,7 +524,7 @@ function MainApp() {
                             size={16}
                             className={loading ? "spin" : ""}
                         />
-                        <span>{loading ? "Đang quét..." : "Quét thiết bị"}</span>
+                        <span>{loading ? t("devices.scanning") : t("devices.scan")}</span>
                         <ScanLine size={15} className="scan-decoration" />
                     </button>
                 </section>
@@ -516,8 +538,8 @@ function MainApp() {
                                 </div>
 
                                 <div>
-                                    <h2>Connected devices</h2>
-                                    <p>Thiết bị được phát hiện qua USB</p>
+                                    <h2>{t("devices.title")}</h2>
+                                    <p>{t("intro.subtitle")}</p>
                                 </div>
                             </div>
 
@@ -540,12 +562,7 @@ function MainApp() {
                                         <span className="empty-spark spark-two" />
                                     </div>
 
-                                    <h3>Chưa tìm thấy thiết bị</h3>
-
-                                    <p>
-                                        Kết nối điện thoại bằng cáp USB và bật
-                                        USB Debugging để bắt đầu.
-                                    </p>
+                                    <h3>{t("devices.none_found")}</h3>
 
                                     <button
                                         className="secondary-button"
@@ -553,7 +570,7 @@ function MainApp() {
                                         disabled={loading}
                                     >
                                         <RefreshCw size={14} />
-                                        Quét lại thiết bị
+                                        {t("devices.scan")}
                                     </button>
                                 </div>
                             ) : (
@@ -641,22 +658,22 @@ function MainApp() {
                                                     {isConnectingThis ? (
                                                         <>
                                                             <RefreshCw size={15} className="connect-spinner" />
-                                                            Đang xử lý media...
+                                                            {t("devices.connecting")}
                                                         </>
                                                     ) : isStreamReady ? (
                                                         <>
                                                             <Check size={15} />
-                                                            Đã kết nối
+                                                            {t("devices.connected")}
                                                         </>
                                                     ) : isActive ? (
                                                         <>
                                                             <RefreshCw size={15} className="connect-spinner" />
-                                                            Đang xử lý media...
+                                                            {t("devices.connecting")}
                                                         </>
                                                     ) : (
                                                         <>
                                                             <PlugZap size={15} />
-                                                            Kết nối thiết bị
+                                                            {t("devices.connect")}
                                                         </>
                                                     )}
                                                 </button>
@@ -779,7 +796,7 @@ function MainApp() {
                                     disabled={connecting}
                                 >
                                     <MonitorSmartphone size={15} />
-                                    Mở cửa sổ màn hình
+                                    {t("devices.view_stream")}
                                 </button>
 
                                 <button
@@ -788,7 +805,7 @@ function MainApp() {
                                     onClick={disconnectDevice}
                                 >
                                     <Unplug size={15} />
-                                    {connecting ? "Đang xử lý..." : "Ngắt kết nối"}
+                                    {connecting ? t("devices.disconnecting") : t("devices.disconnect")}
                                 </button>
                             </div>
                         ) : (
@@ -878,13 +895,30 @@ function MainApp() {
                 <footer className="app-footer">
                     <div>
                         <span className="footer-brand-dot" />
-                        <span>MIRRUNE DESKTOP</span>
+                        <span>{t("footer.desktop")}</span>
                     </div>
 
-                    <span>DESIGNED FOR DEVICE CONNECTION</span>
-                    <span className="footer-version">BUILD 0.1.0</span>
+                    <span>{t("footer.tagline")}</span>
+                    <span className="footer-version">{t("footer.build", { version: appVersion })}</span>
                 </footer>
             </main>
+
+            <SettingsModal
+                isOpen={isSettingsOpen}
+                onClose={() => setIsSettingsOpen(false)}
+                onOpenAbout={() => setIsAboutOpen(true)}
+                onCheckUpdate={() => setIsUpdateOpen(true)}
+            />
+
+            <AboutModal
+                isOpen={isAboutOpen}
+                onClose={() => setIsAboutOpen(false)}
+            />
+
+            <UpdateModal
+                isOpen={isUpdateOpen}
+                onClose={() => setIsUpdateOpen(false)}
+            />
         </div>
     );
 }

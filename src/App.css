@@ -231,6 +231,26 @@ button:focus-visible {
   border-left: 1px solid var(--border);
 }
 
+.header-settings-btn {
+  margin-left: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 5px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.header-settings-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
 /* MAIN LAYOUT */
 
 .main-content {

@@ -2,6 +2,9 @@ use super::media_transport::MediaTransport;
 use super::tools::AndroidTools;
 use super::{adb::run_command_with_timeout, media::MediaReceiver};
 use serde::Serialize;
+#[cfg(windows)]
+use std::os::windows::process::CommandExt;
+
 use std::{
     env,
     io::Read,
@@ -94,32 +97,38 @@ impl ScrcpyRuntime {
         let scid_arg = format!("scid={scid}");
 
         let phase_started = Instant::now();
-        let mut child = match Command::new(tools.adb())
-            .args([
-                "-s",
-                serial,
-                "shell",
-                &classpath,
-                "app_process",
-                "/",
-                SERVER_CLASS,
-                &version,
-                &scid_arg,
-                "tunnel_forward=true",
-                "video=true",
-                "audio=true",
-                "control=false",
-                "cleanup=true",
-                "max_size=1920",
-                "max_fps=60",
-                "video_bit_rate=12000000",
-                "video_codec=h264",
-                "audio_codec=opus",
-            ])
-            .stdin(Stdio::null())
-            .stdout(Stdio::inherit())
-            .stderr(Stdio::inherit())
-            .spawn()
+        let mut command = Command::new(tools.adb());
+        command.args([
+            "-s",
+            serial,
+            "shell",
+            &classpath,
+            "app_process",
+            "/",
+            SERVER_CLASS,
+            &version,
+            &scid_arg,
+            "tunnel_forward=true",
+            "video=true",
+            "audio=true",
+            "control=false",
+            "cleanup=true",
+            "max_size=1920",
+            "max_fps=60",
+            "video_bit_rate=12000000",
+            "video_codec=h264",
+            "audio_codec=opus",
+        ]);
+        command.stdin(Stdio::null());
+        command.stdout(Stdio::null());
+        command.stderr(Stdio::null());
+
+        #[cfg(windows)]
+        {
+            command.creation_flags(0x08000000); // CREATE_NO_WINDOW
+        }
+
+        let mut child = match command.spawn()
         {
             Ok(child) => child,
             Err(error) => {

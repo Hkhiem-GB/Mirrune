@@ -86,6 +86,7 @@ async fn refresh_android_connection(
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_updater::Builder::new().build())
         .setup(|app| {
             let resource_dir = app.path().resource_dir()?;
             app.manage(AndroidConnection::with_resource_dir(resource_dir));
