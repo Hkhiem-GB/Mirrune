@@ -19,7 +19,7 @@ Mirrune giúp kết nối thiết bị Android, xem màn hình trực tiếp tr�
 
 - **Windows 10/11 x64:** nền tảng chạy ứng dụng desktop hiện tại.
 - **Android:** thiết bị điện thoại/máy tính bảng có thể kết nối và trình chiếu qua USB. Dự án hiện chưa cung cấp ứng dụng APK chạy trực tiếp trên Android.
-- Đối với **IOS** thì sẽ cập nhật sau.
+- Đối với **iOS** và **macOS** thì sẽ cập nhật sau.
 ## Phiên bản
 
 **0.1.0**
