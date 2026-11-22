@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="520" viewBox="0 0 1600 520"><rect width="1600" height="520" rx="24" fill="#0D0A13"/><g transform="translate(35 4) scale(.98)"><defs>
+<linearGradient id="brand" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF315F"/><stop offset="0.48" stop-color="#E91E8F"/><stop offset="1" stop-color="#8B35F5"/></linearGradient>
+<linearGradient id="brand2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FF315F"/><stop offset="1" stop-color="#8B35F5"/></linearGradient>
+</defs>
+<g fill="url(#brand)">
+<!-- left folded ribbon -->
+<path d="M92 350V168c0-58 65-91 113-58l51 35 0 82-98-67v190z"/>
+<!-- right folded ribbon -->
+<path d="M420 350V168c0-58-65-91-113-58l-51 35v82l98-67v190z"/>
+<!-- lower diagonal ribbon tails -->
+<path d="M92 350l66-53v88l-66 48z"/>
+<path d="M420 350l-66-53v88l66 48z"/>
+</g>
+<!-- central play mark -->
+<path d="M222 218c-9-6-20 1-20 12v82c0 11 11 18 20 12l66-41c9-6 9-19 0-25z" fill="url(#brand2)"/>
+</g><text x="560" y="260" fill="#F7F4FA" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="150" font-weight="750" letter-spacing="13">MIRRUNE</text><text x="568" y="345" fill="#B9A9CB" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="37" font-weight="550" letter-spacing="12">SCREEN  •  AUDIO BRIDGE</text></svg>

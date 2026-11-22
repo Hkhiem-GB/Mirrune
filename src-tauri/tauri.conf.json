@@ -1,0 +1,63 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Mirrune",
+  "version": "0.1.0",
+  "identifier": "com.mirrune.desktop",
+  "build": {
+    "beforeDevCommand": "pnpm dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "pnpm build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Mirrune",
+        "width": 1200,
+        "height": 725,
+        "minWidth": 800,
+        "minHeight": 600,
+        "backgroundColor": "#080A10",
+        "additionalBrowserArgs": "--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection --autoplay-policy=no-user-gesture-required"
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "resources": {
+      "resources/tools/adb/adb.exe": "tools/adb/adb.exe",
+      "resources/tools/adb/AdbWinApi.dll": "tools/adb/AdbWinApi.dll",
+      "resources/tools/adb/AdbWinUsbApi.dll": "tools/adb/AdbWinUsbApi.dll",
+      "resources/tools/scrcpy/scrcpy-server": "tools/scrcpy/scrcpy-server",
+      "resources/tools/adb/NOTICE.txt": "licenses/platform-tools-NOTICE.txt",
+      "resources/tools/scrcpy/LICENSE.txt": "licenses/scrcpy-LICENSE.txt",
+      "resources/THIRD_PARTY_NOTICES.md": "licenses/THIRD_PARTY_NOTICES.md"
+    },
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "windows": {
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper",
+        "silent": true
+      },
+      "nsis": {
+        "installerIcon": "icons/icon.ico",
+        "uninstallerIcon": "icons/icon.ico",
+        "headerImage": "nsis/header.bmp",
+        "sidebarImage": "nsis/sidebar.bmp",
+        "installerHooks": "nsis/installer-hooks.nsh",
+        "startMenuFolder": "Mirrune"
+      }
+    }
+  }
+}

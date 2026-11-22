@@ -1,0 +1,379 @@
+.device-screen {
+    --screen-bg: #0D0A13;
+    --screen-surface: rgba(20, 18, 30, 0.92);
+    --screen-border: rgba(191, 172, 218, 0.12);
+    --screen-text: #F7F4FA;
+    --screen-muted: #B9A9CB;
+    --screen-red: #FF315F;
+    --screen-violet: #8B35F5;
+
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    color: var(--screen-text);
+    background:
+            radial-gradient(ellipse at 50% -30%, rgba(103, 61, 124, 0.2), transparent 60%),
+            linear-gradient(145deg, #0D0A13, #0D0A13 55%, #120D1B);
+}
+
+.screen-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 0 0 62px;
+    min-height: 62px;
+    padding: 0 20px;
+    border-bottom: 1px solid var(--screen-border);
+    background: rgba(10, 9, 16, 0.8);
+}
+
+.screen-brand {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+
+.screen-brand-logo {
+    display: block;
+    width: 165px;
+    max-height: 44px;
+    object-fit: contain;
+    object-position: left center;
+}
+
+.screen-connection-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #b9b2c3;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.8px;
+}
+
+.screen-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #4cdda0;
+    box-shadow: 0 0 9px rgba(76, 221, 160, 0.5);
+    animation: screen-pulse 2s ease-in-out infinite;
+}
+
+.screen-window-button {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    color: #aaa2b2;
+    border: 1px solid var(--screen-border);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.025);
+    cursor: pointer;
+    transition: 180ms ease;
+}
+
+.screen-window-button:hover {
+    color: white;
+    border-color: rgba(240, 68, 94, 0.4);
+    background: rgba(240, 68, 94, 0.12);
+}
+
+.screen-workspace {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    padding: 20px;
+    gap: 15px;
+}
+
+.screen-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex: 0 0 auto;
+}
+
+.screen-overline {
+    color: #b48ca8;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 8px;
+    letter-spacing: 1.5px;
+}
+
+.screen-toolbar h1 {
+    margin: 5px 0 0;
+    font-family: "Oxanium", sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.screen-media-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 10px;
+    color: #d2b5ff;
+    border: 1px solid rgba(149, 102, 245, 0.2);
+    border-radius: 7px;
+    background: rgba(149, 102, 245, 0.08);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 8px;
+    letter-spacing: 0.5px;
+}
+
+.device-display {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    border: 1px solid var(--screen-border);
+    border-radius: 14px;
+    background:
+            radial-gradient(ellipse at center, rgba(88, 55, 105, 0.1), transparent 60%),
+            #050509;
+    box-shadow:
+            inset 0 0 70px rgba(0, 0, 0, 0.55),
+            0 12px 35px rgba(0, 0, 0, 0.2);
+}
+
+.device-video-canvas {
+    object-fit: contain;
+    image-rendering: auto;
+}
+
+.device-screen.video-stream-fullscreen .screen-header,
+.device-screen.video-stream-fullscreen .screen-toolbar,
+.device-screen.video-stream-fullscreen .screen-media-footer {
+    display: none;
+}
+
+.device-screen.video-stream-fullscreen .screen-workspace {
+    padding: 0;
+    gap: 0;
+}
+
+.device-screen.video-stream-fullscreen .device-display {
+    position: fixed;
+    z-index: 100;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    flex: none;
+    border: 0;
+    border-radius: 0;
+    background: #000;
+    box-shadow: none;
+}
+
+.device-display::before {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: "";
+    opacity: 0.18;
+    background-image:
+            linear-gradient(rgba(190, 160, 216, 0.035) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(190, 160, 216, 0.035) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(ellipse, black, transparent 78%);
+}
+
+.display-placeholder {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    max-width: 390px;
+    padding: 25px;
+    text-align: center;
+}
+
+.display-placeholder-icon {
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    margin-bottom: 19px;
+    color: #d18aa9;
+    border: 1px solid rgba(240, 68, 94, 0.24);
+    border-radius: 21px;
+    background: linear-gradient(145deg, rgba(240, 68, 94, 0.13), rgba(149, 102, 245, 0.13));
+    box-shadow: 0 0 35px rgba(240, 68, 94, 0.08);
+}
+
+.display-placeholder h2 {
+    margin: 0;
+    color: #eee7f0;
+    font-size: 14px;
+    font-weight: 650;
+}
+
+.display-placeholder p {
+    margin: 9px 0 0;
+    color: var(--screen-muted);
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+.display-loading {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 19px;
+}
+
+.display-loading span {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--screen-red);
+    animation: screen-loading 1s ease-in-out infinite;
+}
+
+.display-loading span:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.display-loading span:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.screen-media-footer {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    flex: 0 0 34px;
+    min-height: 34px;
+    padding: 0 3px;
+}
+
+.screen-media-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--screen-muted);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 8px;
+    letter-spacing: 0.4px;
+}
+
+.screen-media-item svg {
+    color: #b18bff;
+}
+
+.screen-media-item strong {
+    color: #d4cbd9;
+    font-size: 8px;
+    font-weight: 500;
+}
+
+.audio-enable-button {
+    padding: 4px 6px;
+    color: #d4c2ff;
+    border: 1px solid rgba(149, 102, 245, 0.3);
+    border-radius: 5px;
+    background: rgba(149, 102, 245, 0.1);
+    font: inherit;
+    font-size: 7px;
+    cursor: pointer;
+}
+
+.audio-enable-button:hover {
+    border-color: rgba(149, 102, 245, 0.55);
+    background: rgba(149, 102, 245, 0.18);
+}
+
+.screen-media-volume {
+    margin-left: auto;
+}
+
+@keyframes screen-pulse {
+    50% {
+        opacity: 0.45;
+        box-shadow: 0 0 3px rgba(76, 221, 160, 0.2);
+    }
+}
+
+@keyframes screen-loading {
+    0%, 80%, 100% {
+        opacity: 0.3;
+        transform: scale(0.75);
+    }
+
+    40% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+@media (max-width: 600px) {
+    .screen-workspace {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .screen-header {
+        padding: 0 12px;
+    }
+
+    .screen-media-footer {
+        gap: 10px;
+    }
+
+    .screen-media-item {
+        gap: 4px;
+        font-size: 7px;
+    }
+
+    .screen-media-item strong {
+        font-size: 7px;
+    }
+
+    .screen-toolbar h1 {
+        font-size: 19px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .screen-status-dot,
+    .display-loading span {
+        animation: none;
+    }
+}
+
+.window-control-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    color: var(--text-secondary);
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+    transition:
+            color 180ms ease,
+            background 180ms ease,
+            border-color 180ms ease;
+}
+
+.window-control-button:hover {
+    color: #fff;
+    border-color: rgba(149, 102, 245, 0.25);
+    background: rgba(149, 102, 245, 0.12);
+}
