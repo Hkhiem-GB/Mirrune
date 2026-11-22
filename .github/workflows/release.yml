@@ -53,5 +53,5 @@ jobs:
           releaseBody: 'Mirrune v__VERSION__ release. For detailed changes, see the commit history.'
           releaseDraft: false
           prerelease: false
-          includeUpdaterJson: true
+          uploadUpdaterJson: true
           args: ${{ matrix.args }}

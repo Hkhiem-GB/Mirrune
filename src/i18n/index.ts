@@ -7,9 +7,9 @@ const STORAGE_KEY = "mirrune_language";
 
 const savedLanguage = (() => {
   try {
-    return localStorage.getItem(STORAGE_KEY) || "en";
+    return localStorage.getItem(STORAGE_KEY) || "vi";
   } catch {
-    return "en";
+    return "vi";
   }
 })();
 
@@ -19,7 +19,7 @@ void i18n.use(initReactI18next).init({
     vi: { translation: vi },
   },
   lng: savedLanguage,
-  fallbackLng: "en",
+  fallbackLng: "vi",
   interpolation: {
     escapeValue: false,
   },

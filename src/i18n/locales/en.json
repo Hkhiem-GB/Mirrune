@@ -62,7 +62,7 @@
   "footer": {
     "desktop": "MIRRUNE DESKTOP",
     "tagline": "DESIGNED FOR HIGH PERFORMANCE DEVICE LINK",
-    "build": "BUILD {{version}}"
+    "build": "Version {{version}}"
   },
   "settings": {
     "title": "Settings",
