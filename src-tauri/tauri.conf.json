@@ -28,7 +28,7 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDI3QTQ1OThDNDQyOEVCRDgKUldUWTZ5aEVqRm1rSi95R3ZxRXUwTjJjUDBmU2xCVCtOaEhhVjZoa1pRTEQ3R3B2NmRIc2hkRzIK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDczQ0Q4NTdBMEYwNUI3Q0QKUldUTnR3VVBlb1hOYzVlMjA4QlVnbURTVzZ1Tnk1Q1N6VUVFaDJqZldKSU0zeVpxd0hzck03YnAK",
       "endpoints": [
         "https://github.com/Hkhiem-GB/Mirrune/releases/latest/download/latest.json"
       ]
